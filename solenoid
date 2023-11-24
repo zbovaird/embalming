@@ -1,0 +1,13 @@
+const int solenoidPin = 9; // Connect to the base of the NPN transistor
+
+void setup() {
+  pinMode(solenoidPin, OUTPUT); // Set the solenoid pin as output
+}
+
+void loop() {
+  digitalWrite(solenoidPin, HIGH); // Turn on the solenoid (open the valve)
+  delay(5000); // Keep the solenoid open for 5 seconds
+
+  digitalWrite(solenoidPin, LOW); // Turn off the solenoid (close the valve)
+  delay(5000); // Keep the solenoid closed for 5 seconds
+}
