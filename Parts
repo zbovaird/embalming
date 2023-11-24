@@ -1,0 +1,35 @@
+Arduino
+    https://store-usa.arduino.cc/products/arduino-nano-33-ble-with-headers
+
+Water Flow Sensor
+    Digiten Water Flow Sensor
+    Model: FL-S420B
+
+Solenoid
+    Tailonz Pneumatic Solenoid
+    Model: 2W-040-10
+    Volts: DC 12V
+    Pipe size: 3/8''
+
+MagDrive Pump
+    Needs to be a Centrifugal MagDrive to handle non-viscous fluids in a dynamic environment (RoF and Pressure changes)
+    *Need to check if machine requries 120V or 240V
+
+Bluetooth Equipment
+    Flow Sensor
+        Bluetooth module: HC-05 or HC-06; needs to support serial communication (UART)
+        Voltage regulator (if necessary): may need voltage regulator to step down the voltage from the water flow
+            sensor's output (likely 5V) to the required voltage for the bluetooth module
+
+    Flow Control
+        Variable Frequency Drive (VFD)
+            Needs to match power rating of the Magdrive Pump
+            Needs to be compatible with Magdrive (e.g. three-phase AC motor)
+            Bluetooth module needs to be connected to VFD with RS-485
+                Laird BT900 Series (approx $25)
+
+
+    Magdrive
+        Arduino Nano 33 BLE
+        Motor Driver (allows for variable speed control)
+

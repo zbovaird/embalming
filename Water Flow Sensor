@@ -1,0 +1,49 @@
+const int sensorPin = 2;
+volatile int pulseCount;
+unsigned long startTime;
+unsigned long currentTime;
+bool measuring = false;
+const unsigned long measurePeriod = 10000;  // 10 seconds
+const int debounceTime = 50;  // milliseconds, adjust as needed
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(sensorPin, INPUT);
+  attachInterrupt(digitalPinToInterrupt(sensorPin), pulseCounter, RISING);
+}
+
+void loop() {
+  if (!measuring && pulseCount > 0) {
+    // Start measuring
+    measuring = true;
+    startTime = millis();
+    pulseCount = 0;  // Reset the pulse count
+  }
+
+  if (measuring) {
+    currentTime = millis();
+    if (currentTime - startTime > measurePeriod) {
+      // 10 seconds passed, calculate average flow
+      float averageFlow = (pulseCount / 23.0) / 10.0;  // Average flow per second
+      Serial.print("Average flow rate: ");
+      Serial.print(averageFlow);
+      Serial.println(" L/sec");
+
+      // Set this as the baseline flow and stop measuring
+      measuring = false;
+      pulseCount = 0;  // Reset for next time
+    }
+  }
+
+  delay(50);  // Delay to prevent too frequent reading
+}
+
+void pulseCounter() {
+  // Debounce
+  unsigned long debounceTimeCheck = millis();
+  static unsigned long lastPulseTime = 0;
+  if (debounceTimeCheck - lastPulseTime > debounceTime) {
+    pulseCount++;
+    lastPulseTime = debounceTimeCheck;
+  }
+}
