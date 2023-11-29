@@ -1,0 +1,43 @@
+const int sensorPin = 2;  // Connect the sensor signal to digital pin 2
+
+volatile int pulseCount = 0;
+unsigned long startTime = 0;
+unsigned long currentTime = 0;
+float baselineFlow = 0.0;
+bool measuring = false;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(sensorPin, INPUT);
+  attachInterrupt(digitalPinToInterrupt(sensorPin), pulseCounter, RISING);
+}
+
+void loop() {
+  currentTime = millis();
+  
+  if (!measuring && pulseCount > 0) {
+    measuring = true;
+    startTime = millis();
+  }
+
+  if (measuring) {
+    if (currentTime - startTime >= 10000) {  // 10 seconds elapsed
+      measuring = false;
+      baselineFlow = (pulseCount / 23.0) / 10.0;  // Average flow rate for the first 10 seconds (L/min)
+      pulseCount = 0;  // Reset pulse count
+      Serial.print("Baseline Flow: ");
+      Serial.print(baselineFlow);
+      Serial.println(" L/min");
+    }
+  }
+
+  // Display current flow rate
+  float currentFlow = (pulseCount / 23.0);  // Current flow rate (L/min)
+  Serial.print("Current Flow: ");
+  Serial.print(currentFlow);
+  Serial.println(" L/min");
+}
+
+void pulseCounter() {
+  pulseCount++;
+}
