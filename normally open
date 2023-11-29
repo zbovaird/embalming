@@ -70,7 +70,7 @@ void loop() {
     float immediateFlow = (flow_frequency / 7.5) * 60.0; // Same calculation for flow rate
     attachInterrupt(digitalPinToInterrupt(flowSensorPin), flow, RISING); // Re-enable the interrupt
     
-    // Check to see if the baseline has been reached or exceeded
+    // Check to see if the baseline has been reached or exceeded; need to adjust this value to something higher than 0.9 since flow will be reduced upon clearing the obstruction
     if (immediateFlow < baselineFlowRate * 0.9) {
       // If not, close the solenoid again
       digitalWrite(solenoidValvePin, LOW);
