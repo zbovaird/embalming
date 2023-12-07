@@ -1,0 +1,32 @@
+const int sensorPin = 2; // Sensor signal pin
+volatile int pulseCount = 0; // Pulse counter
+unsigned long startTime = 0; // Start time of flow measurement
+float calibrationFactor = 0.0; // Calibration factor (L/pulse)
+bool isCalibrating = false; // Flag for calibration state
+
+void setup() {
+  Serial.begin(9600); // Initialize serial communication
+  pinMode(sensorPin, INPUT); // Set sensor pin as input
+  attachInterrupt(digitalPinToInterrupt(sensorPin), pulseCounter, RISING); // Attach interrupt for rising edge
+}
+
+void loop() {
+  if (!isCalibrating && pulseCount > 0) { // Start calibration if new flow detected
+    isCalibrating = true;
+    startTime = millis(); // Record start time
+  }
+
+  if (isCalibrating) {
+    if (millis() - startTime >= 10000) { // Check if 10 seconds have elapsed
+      isCalibrating = false;
+      calibrationFactor = 1.0 / pulseCount; // Calculate calibration factor (1L / pulse count)
+      Serial.print("Calibration complete! Factor: ");
+      Serial.println(calibrationFactor);
+      pulseCount = 0; // Reset pulse count
+    }
+  }
+}
+
+void pulseCounter() { // Interrupt service routine for pulse counting
+  pulseCount++;
+}
