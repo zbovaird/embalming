@@ -15,7 +15,7 @@ void setup() {
   digitalWrite(solenoidValvePin, HIGH); // Open the solenoid initially
   attachInterrupt(digitalPinToInterrupt(flowSensorPin), flow, RISING);
   Serial.begin(9600);
-  cloopTime = millis();
+  loopTime = millis();
 }
 
 void loop() {
